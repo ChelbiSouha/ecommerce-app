@@ -1,0 +1,31 @@
+<div class="cart-container" *ngIf="items.length; else emptyCart">
+  <h2>Mon Panier</h2>
+  <div class="cart-items">
+    <div class="cart-item" *ngFor="let item of items">
+      <img [src]="item.product.images[0]" [alt]="item.product.name">
+      <div class="details">
+        <h3>{{ item.product.name }}</h3>
+        <p>{{ item.product.description }}</p>
+        <p>Prix unitaire: {{ item.product.price | currency:'EUR' }}</p>
+        <div class="quantity">
+          Quantité: 
+          <input type="number" [value]="item.quantity" min="1"
+                 (change)="updateQuantity(item.product.id, $event)">
+        </div>
+        <p>Sous-total: {{ item.product.price * item.quantity | currency:'EUR' }}</p>
+        <button mat-button color="warn" (click)="removeItem(item.product.id)">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-summary">
+    <p>Sous-total: {{ subtotal | currency:'EUR' }}</p>
+    <p>Frais de livraison: {{ items.length ? shippingFee : 0 | currency:'EUR' }}</p>
+    <h3>Total: {{ total | currency:'EUR' }}</h3>
+    <button mat-raised-button color="primary" (click)="proceedToCheckout()">Procéder au paiement</button>
+  </div>
+</div>
+
+<ng-template #emptyCart>
+  <p>Votre panier est vide.</p>
+</ng-template>

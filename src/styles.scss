@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+/* THESE MUST BE AT THE VERY TOP - NO COMMENTS OR EMPTY LINES BEFORE */
+@use '@angular/material' as mat;
+
+/* Initialize Angular Material core styles */
+@include mat.core();
+
+/* Define your custom Material theme */
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+/* General body styles */
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Basic layout reset */
+html, body {
+  height: 100%;
+}

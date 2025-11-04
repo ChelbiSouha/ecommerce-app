@@ -1,0 +1,54 @@
+.auth-wrapper {
+  min-height: calc(100vh - 64px); /* ajuste si tu as header fixe */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f7f8fb, #e8f0ff);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(12, 35, 68, 0.08);
+  text-align: center;
+  background-color: #fff;
+}
+
+h2 {
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+button {
+  margin-top: 0.6rem;
+}
+
+.message {
+  margin-top: 0.9rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.switch {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+
+  a {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 500;
+  }
+}

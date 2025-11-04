@@ -1,0 +1,20 @@
+<mat-card class="product-card" (click)="goToDetails()">
+  <img mat-card-image [src]="product.images[0]" [alt]="product.name" class="product-image">
+
+  <mat-card-content>
+    <h3 class="product-title">{{ product.name }}</h3>
+    <p class="product-price">{{ product.price | currency:'EUR' }}</p>
+
+    <!-- ⭐ Use shared rating component only -->
+    <app-rating [value]="product.rating"></app-rating>
+
+    <p class="product-category">{{ product.category }}</p>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="addToCart($event)">
+      <mat-icon>add_shopping_cart</mat-icon>
+      Ajouter au panier
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,39 @@
+<div class="product-detail" *ngIf="product">
+  <div class="gallery">
+    <img class="main-image" [src]="selectedImage" [alt]="product.name">
+    <div class="thumbnails">
+      <img *ngFor="let img of product.images" [src]="img" [alt]="product.name" 
+           [class.selected]="img === selectedImage"
+           (click)="selectImage(img)">
+    </div>
+  </div>
+
+  <div class="info">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <p><strong>Prix:</strong> {{ product.price | currency:'EUR' }}</p>
+    <p><strong>Disponibilité:</strong> {{ product.stock > 0 ? 'En stock' : 'Rupture' }}</p>
+    <p><strong>Note:</strong>
+      <span *ngFor="let star of [1,2,3,4,5]">
+        <mat-icon color="warn">{{ star <= product.rating ? 'star' : 'star_border' }}</mat-icon>
+      </span>
+    </p>
+
+    <div class="quantity">
+      <label>Quantité:</label>
+      <input type="number" [(ngModel)]="quantity" [min]="1" [max]="product.stock">
+    </div>
+
+    <button mat-raised-button color="primary" (click)="addToCart()" [disabled]="product.stock === 0">
+      Ajouter au panier
+    </button>
+  </div>
+</div>
+
+<!-- Produits similaires -->
+<div class="similar" *ngIf="similarProducts.length">
+  <h3>Produits similaires</h3>
+  <div class="grid">
+    <app-product-card *ngFor="let p of similarProducts" [product]="p"></app-product-card>
+  </div>
+</div>

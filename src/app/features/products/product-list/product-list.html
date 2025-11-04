@@ -1,0 +1,49 @@
+<div class="products-page">
+  <h2>Catalogue de Produits</h2>
+
+  <!-- Filtres et tri -->
+  <div class="filters">
+    <mat-form-field appearance="fill">
+      <mat-label>Catégorie</mat-label>
+      <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
+        <mat-option value="">Toutes</mat-option>
+        <mat-option *ngFor="let c of categories" [value]="c">{{c}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Note minimum</mat-label>
+      <mat-select [(value)]="ratingFilter" (selectionChange)="applyFilters()">
+        <mat-option value="0">Toutes</mat-option>
+        <mat-option value="1">1 étoile</mat-option>
+        <mat-option value="2">2 étoiles</mat-option>
+        <mat-option value="3">3 étoiles</mat-option>
+        <mat-option value="4">4 étoiles</mat-option>
+        <mat-option value="5">5 étoiles</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Trier par</mat-label>
+      <mat-select [(value)]="sortOption" (selectionChange)="applySort()">
+        <mat-option value="">Par défaut</mat-option>
+        <mat-option value="priceAsc">Prix croissant</mat-option>
+        <mat-option value="priceDesc">Prix décroissant</mat-option>
+        <mat-option value="popularity">Popularité</mat-option>
+        <mat-option value="newest">Nouveautés</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Grille de produits -->
+  <div class="grid">
+    <app-product-card *ngFor="let product of paginatedProducts" [product]="product"></app-product-card>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button mat-button (click)="prevPage()" [disabled]="page===1">Précédent</button>
+    <span>Page {{page}} / {{totalPages}}</span>
+    <button mat-button (click)="nextPage()" [disabled]="page===totalPages">Suivant</button>
+  </div>
+</div>
