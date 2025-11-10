@@ -3,7 +3,7 @@
 
   <mat-card-content>
     <h3 class="product-title">{{ product.name }}</h3>
-    <p class="product-price">{{ product.price | currency:'EUR' }}</p>
+    <p class="product-price">{{ product.price | currency:'TND':'symbol':'1.2-2' }}</p>
 
     <!-- ⭐ Use shared rating component only -->
     <app-rating [value]="product.rating"></app-rating>

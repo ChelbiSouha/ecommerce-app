@@ -1,0 +1,52 @@
+<div class="profile-wrapper" *ngIf="user">
+  <div class="profile-container">
+    <!-- Icon card -->
+    <div class="profile-icon-card">
+      <mat-icon class="profile-icon">account_circle</mat-icon>
+    </div>
+
+    <!-- Header -->
+    <div class="profile-header">
+      <h1 class="profile-name">{{ user.firstName }} {{ user.lastName }}</h1>
+      <p class="profile-email">{{ user.email }}</p>
+    </div>
+
+    <!-- Body / Form -->
+    <div class="profile-body">
+      <form *ngIf="editMode; else viewMode" (ngSubmit)="saveProfile()" class="profile-form">
+        <mat-form-field appearance="fill" class="rounded-field full-width">
+          <mat-icon matPrefix class="icon-accent">person</mat-icon>
+          <mat-label>Prénom</mat-label>
+          <input matInput [(ngModel)]="user.firstName" name="firstName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="rounded-field full-width">
+          <mat-icon matPrefix class="icon-accent">person</mat-icon>
+          <mat-label>Nom</mat-label>
+          <input matInput [(ngModel)]="user.lastName" name="lastName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="rounded-field full-width">
+          <mat-icon matPrefix class="icon-accent">home</mat-icon>
+          <mat-label>Adresse</mat-label>
+          <input matInput [(ngModel)]="user.address" name="address" />
+        </mat-form-field>
+
+        <button mat-raised-button type="submit" class="btn-save">
+          <mat-icon>save</mat-icon> Enregistrer
+        </button>
+      </form>
+
+      <ng-template #viewMode>
+        <div class="profile-info">
+          <p><strong>Adresse:</strong> {{ user.address || 'Non renseignée' }}</p>
+          <button mat-raised-button class="btn-edit" (click)="enableEdit()">
+            <mat-icon>edit</mat-icon> Modifier
+          </button>
+        </div>
+      </ng-template>
+
+      <p class="message">{{ message }}</p>
+    </div>
+  </div>
+</div>

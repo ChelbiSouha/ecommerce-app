@@ -1,44 +1,62 @@
 <div class="auth-wrapper">
-  <mat-card class="auth-card">
-    <h2>Créer un compte</h2>
+  <div class="auth-container">
+    <!-- Left decorative image -->
+    <img src="assets/images/left-decor.png" alt="Decoration Left" class="popout-image left" />
 
-    <form (ngSubmit)="signup()" class="form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Prénom</mat-label>
-        <input matInput [(ngModel)]="user.firstName" name="firstName" required />
-      </mat-form-field>
+    <!-- Right decorative image -->
+    <img src="assets/images/right-decor.png" alt="Decoration Right" class="popout-image right" />
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nom</mat-label>
-        <input matInput [(ngModel)]="user.lastName" name="lastName" required />
-      </mat-form-field>
+    <!-- Sign-up card -->
+    <mat-card class="auth-card">
+      <h2>
+        <mat-icon class="title-icon">person_add</mat-icon>
+        Créer un compte
+      </h2>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput [(ngModel)]="user.email" name="email" type="email" required />
-      </mat-form-field>
+      <form (ngSubmit)="signup()" class="form">
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">person</mat-icon>
+          <mat-label>Prénom</mat-label>
+          <input matInput [(ngModel)]="user.firstName" name="firstName" required />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mot de passe</mat-label>
-        <input matInput [(ngModel)]="user.password" name="password" type="password" required />
-      </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">person</mat-icon>
+          <mat-label>Nom</mat-label>
+          <input matInput [(ngModel)]="user.lastName" name="lastName" required />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Confirmer le mot de passe</mat-label>
-        <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required />
-      </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">email</mat-icon>
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="user.email" name="email" type="email" required />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Adresse</mat-label>
-        <input matInput [(ngModel)]="user.address" name="address" />
-      </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">lock</mat-icon>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [(ngModel)]="user.password" name="password" type="password" required />
+        </mat-form-field>
 
-      <button mat-raised-button color="primary" class="full-width" type="submit">
-        S’inscrire
-      </button>
-    </form>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">lock</mat-icon>
+          <mat-label>Confirmer le mot de passe</mat-label>
+          <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required />
+        </mat-form-field>
 
-    <p class="message" *ngIf="message">{{ message }}</p>
-    <p class="switch">Déjà un compte ? <a routerLink="/login">Connectez-vous</a></p>
-  </mat-card>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">home</mat-icon>
+          <mat-label>Adresse</mat-label>
+          <input matInput [(ngModel)]="user.address" name="address" />
+        </mat-form-field>
+
+        <button mat-raised-button class="submit-btn full-width" type="submit">
+          <mat-icon>person_add</mat-icon> S’inscrire
+        </button>
+      </form>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+      <p class="switch">Déjà un compte ? <a routerLink="/auth/login">Connectez-vous</a></p>
+    </mat-card>
+  </div>
 </div>

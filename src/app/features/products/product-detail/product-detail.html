@@ -1,39 +1,93 @@
 <div class="product-detail" *ngIf="product">
+  <!-- 🖼️ Galerie -->
   <div class="gallery">
-    <img class="main-image" [src]="selectedImage" [alt]="product.name">
+    <img
+  #mainImage
+  class="main-image"
+  [src]="selectedImage"
+  [alt]="product.name"
+  loading="lazy"
+/>
+
+
     <div class="thumbnails">
-      <img *ngFor="let img of product.images" [src]="img" [alt]="product.name" 
-           [class.selected]="img === selectedImage"
-           (click)="selectImage(img)">
+      <img
+        *ngFor="let img of product.images"
+        [src]="img"
+        [alt]="product.name"
+        [class.selected]="img === selectedImage"
+        (click)="selectImage(img)"
+      />
     </div>
   </div>
 
+  <!-- 🛍️ Informations -->
   <div class="info">
     <h2>{{ product.name }}</h2>
-    <p>{{ product.description }}</p>
-    <p><strong>Prix:</strong> {{ product.price | currency:'EUR' }}</p>
-    <p><strong>Disponibilité:</strong> {{ product.stock > 0 ? 'En stock' : 'Rupture' }}</p>
-    <p><strong>Note:</strong>
-      <span *ngFor="let star of [1,2,3,4,5]">
-        <mat-icon color="warn">{{ star <= product.rating ? 'star' : 'star_border' }}</mat-icon>
+
+    <p class="description">
+      {{ product.description }}
+    </p>
+
+    <p class="price">
+      {{ product.price | number:'1.2-2' }} DT
+    </p>
+
+    <p>
+      <mat-icon color="accent">inventory_2</mat-icon>
+      <strong>Disponibilité :</strong>
+      <span [ngClass]="{ 'in-stock': product.stock > 0, 'out-stock': product.stock === 0 }">
+        {{ product.stock > 0 ? 'En stock' : 'Rupture' }}
+      </span>
+    </p>
+
+    <p>
+      <mat-icon color="warn">star_rate</mat-icon>
+      <strong>Note :</strong>
+      <span *ngFor="let star of [1, 2, 3, 4, 5]">
+        <mat-icon color="warn">
+          {{ star <= product.rating ? 'star' : 'star_border' }}
+        </mat-icon>
       </span>
     </p>
 
     <div class="quantity">
-      <label>Quantité:</label>
-      <input type="number" [(ngModel)]="quantity" [min]="1" [max]="product.stock">
+      <mat-form-field appearance="outline">
+        <mat-label>Quantité</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="quantity"
+          [min]="1"
+          [max]="product.stock"
+        />
+      </mat-form-field>
     </div>
 
-    <button mat-raised-button color="primary" (click)="addToCart()" [disabled]="product.stock === 0">
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-btn"
+      (click)="addToCart()"
+      [disabled]="product.stock === 0"
+    >
+      <mat-icon>add_shopping_cart</mat-icon>
       Ajouter au panier
     </button>
   </div>
 </div>
 
-<!-- Produits similaires -->
+<!-- 💫 Produits similaires -->
 <div class="similar" *ngIf="similarProducts.length">
-  <h3>Produits similaires</h3>
+  <h3>
+    <mat-icon color="primary">recommend</mat-icon>
+    Produits similaires
+  </h3>
   <div class="grid">
-    <app-product-card *ngFor="let p of similarProducts" [product]="p"></app-product-card>
+    <app-product-card
+      *ngFor="let p of similarProducts"
+      [product]="p"
+      class="fade-in"
+    ></app-product-card>
   </div>
 </div>

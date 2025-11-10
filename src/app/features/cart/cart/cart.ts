@@ -1,34 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { CartService, CartItem } from '../../../core/cart';
+import { AuthService } from '../../../core/auth';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule, 
-    CurrencyPipe, 
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule],
+  imports: [CommonModule, CurrencyPipe, MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './cart.html',
-  styleUrl: './cart.scss',
+  styleUrls: ['./cart.scss'],
 })
-export class Cart implements OnInit{
+export class Cart implements OnInit {
   items: CartItem[] = [];
   shippingFee: number = 5.99;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private auth: AuthService) {}
 
   ngOnInit(): void {
     this.loadCart();
   }
 
   loadCart() {
-    this.items = this.cartService.getItems();
+    this.items = this.auth.isLoggedIn ? this.cartService.getItems() : [];
   }
-
+ 
   removeItem(productId: number) {
     this.cartService.remove(productId);
     this.loadCart();
@@ -47,9 +44,15 @@ export class Cart implements OnInit{
   get total(): number {
     return this.subtotal + (this.items.length ? this.shippingFee : 0);
   }
+  isUserLoggedIn(): boolean {
+  return this.auth.isLoggedIn;
+}
 
   proceedToCheckout() {
+    if (!this.auth.isLoggedIn) {
+      alert('Veuillez vous connecter pour procéder au paiement.');
+      return;
+    }
     alert('Redirection vers le paiement (mockup)');
   }
-
 }

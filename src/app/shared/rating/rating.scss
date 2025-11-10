@@ -1,12 +1,15 @@
 .rating {
   display: flex;
+  justify-content: center;   // center horizontally
+  align-items: center;       // center vertically if needed
   gap: 0.2rem;
+  margin: 0.3rem 0;
 
   .star {
     font-size: 1.2rem;
     color: #ccc;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
 
     &.filled {
       color: #ffc107; // golden star
@@ -14,6 +17,7 @@
 
     &:hover {
       color: #ffb300;
+      transform: scale(1.2);
     }
   }
 }

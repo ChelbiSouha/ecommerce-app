@@ -82,6 +82,84 @@
   }
 }
 
+/* 🌟 Profile Menu Styling */
+::ng-deep .profile-menu {
+  padding: 0.8rem 1rem !important;
+  min-width: 240px;
+  border-radius: 16px !important;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden;
+  animation: fadeInUp 0.3s ease;
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.6rem;
+
+    .avatar {
+      font-size: 2.4rem;
+      color: #1976d2;
+    }
+
+    .info {
+      h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      small {
+        color: #777;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.4rem;
+
+    button {
+      font-size: 0.9rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background-color: rgba(25, 118, 210, 0.1);
+      }
+
+      mat-icon {
+        margin-right: 0.5rem;
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+/* 🪄 Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 📱 Responsive Design */
 @media (max-width: 768px) {
   .toolbar {
@@ -101,6 +179,18 @@
     button[mat-stroked-button] {
       font-size: 0.9rem;
       padding: 0 0.8rem;
+    }
+  }
+
+  .profile-menu {
+    min-width: 180px;
+
+    .profile-header .info h4 {
+      font-size: 0.9rem;
+    }
+
+    .profile-actions button {
+      font-size: 0.85rem;
     }
   }
 }

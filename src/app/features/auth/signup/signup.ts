@@ -8,10 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-signup',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -19,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    RouterModule,
     MatIconModule
   ],
   templateUrl: './signup.html',

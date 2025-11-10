@@ -1,31 +1,45 @@
-<div class="cart-container" *ngIf="items.length; else emptyCart">
-  <h2>Mon Panier</h2>
-  <div class="cart-items">
-    <div class="cart-item" *ngFor="let item of items">
-      <img [src]="item.product.images[0]" [alt]="item.product.name">
-      <div class="details">
-        <h3>{{ item.product.name }}</h3>
-        <p>{{ item.product.description }}</p>
-        <p>Prix unitaire: {{ item.product.price | currency:'EUR' }}</p>
-        <div class="quantity">
-          Quantité: 
-          <input type="number" [value]="item.quantity" min="1"
-                 (change)="updateQuantity(item.product.id, $event)">
+<div class="cart-wrapper" *ngIf="isUserLoggedIn(); else loginMessage">
+  <div class="cart-container" *ngIf="items.length; else emptyCart">
+    <!-- Title -->
+    <h2 class="cart-title">🛒 Mon Panier</h2>
+
+    <!-- Cart Items -->
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of items">
+        <img [src]="item.product.images[0]" [alt]="item.product.name">
+        <div class="details">
+          <h3 class="product-name">✨ {{ item.product.name }}</h3>
+          <p class="product-desc">{{ item.product.description }}</p>
+          <p>Prix unitaire: {{ item.product.price | currency:'TND':'symbol':'1.2-2' }}</p>
+          <div class="quantity">
+            Quantité:
+            <input type="number" [value]="item.quantity" min="1"
+                   (change)="updateQuantity(item.product.id, $event)">
+          </div>
+          <p>Sous-total: {{ item.product.price * item.quantity | currency:'TND':'symbol':'1.2-2' }}</p>
+          <button mat-raised-button color="warn" (click)="removeItem(item.product.id)">
+            <mat-icon>delete</mat-icon> Supprimer
+          </button>
         </div>
-        <p>Sous-total: {{ item.product.price * item.quantity | currency:'EUR' }}</p>
-        <button mat-button color="warn" (click)="removeItem(item.product.id)">Supprimer</button>
       </div>
     </div>
-  </div>
 
-  <div class="cart-summary">
-    <p>Sous-total: {{ subtotal | currency:'EUR' }}</p>
-    <p>Frais de livraison: {{ items.length ? shippingFee : 0 | currency:'EUR' }}</p>
-    <h3>Total: {{ total | currency:'EUR' }}</h3>
-    <button mat-raised-button color="primary" (click)="proceedToCheckout()">Procéder au paiement</button>
+    <!-- Summary -->
+    <div class="cart-summary">
+      <p>Sous-total: {{ subtotal | currency:'TND':'symbol':'1.2-2' }}</p>
+      <p>Frais de livraison: {{ items.length ? shippingFee : 0 | currency:'TND':'symbol':'1.2-2' }}</p>
+      <h3>Total: {{ total | currency:'TND':'symbol':'1.2-2' }}</h3>
+      <button mat-raised-button color="primary" (click)="proceedToCheckout()">
+        <mat-icon>payment</mat-icon> Procéder au paiement
+      </button>
+    </div>
   </div>
 </div>
 
 <ng-template #emptyCart>
-  <p>Votre panier est vide.</p>
+  <p class="empty-msg">Votre panier est vide 🛍️</p>
+</ng-template>
+
+<ng-template #loginMessage>
+  <p class="empty-msg">Veuillez vous connecter pour voir votre panier 🔒</p>
 </ng-template>

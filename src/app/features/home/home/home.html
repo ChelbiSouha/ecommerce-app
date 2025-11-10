@@ -1,6 +1,42 @@
 <div class="home">
-  <h2>Produits vedettes</h2>
-  <div class="grid">
-    <app-product-card *ngFor="let p of products" [product]="p"></app-product-card>
+  <!-- Carousel -->
+  <div class="carousel">
+    <div
+      class="slide"
+      *ngFor="let banner of banners; let i = index"
+      [class.active]="i === currentSlide"
+    >
+      <img [src]="banner.image" [alt]="banner.title" />
+      <div class="caption">
+        <h2>{{ banner.title }}</h2>
+      </div>
+    </div>
   </div>
+
+  <!-- Categories -->
+  <section class="categories">
+  <h2><i class="fa fa-tags"></i> Nos Catégories</h2>
+    <div class="categories-grid">
+      <div
+        class="category-card"
+        *ngFor="let c of categories"
+        [routerLink]="['/products']"
+        [queryParams]="{ category: c.name }"
+      >
+        <img [src]="c.image" [alt]="c.name" />
+        <div class="overlay">
+          <span class="icon">{{ c.icon }}</span>
+          <p>{{ c.name }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured">
+  <h2><i class="fa fa-star"></i> Produits Vedettes</h2>
+    <div class="grid">
+      <app-product-card *ngFor="let p of products" [product]="p"></app-product-card>
+    </div>
+  </section>
 </div>

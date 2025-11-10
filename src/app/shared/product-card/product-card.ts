@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Rating } from '../rating/rating';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule, 

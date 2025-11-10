@@ -1,6 +1,7 @@
 <mat-toolbar color="primary" class="toolbar">
   <span class="logo" routerLink="/">🛍️ MyShop</span>
 
+
   <span class="spacer"></span>
 
   <div class="search-box">
@@ -15,10 +16,49 @@
   </div>
 
   <button mat-icon-button [routerLink]="['/cart']" aria-label="Panier">
-    <mat-icon>shopping_cart</mat-icon>
+  <mat-icon id="cart-icon">shopping_cart</mat-icon>
+</button>
+
+
+  <button
+    mat-icon-button
+    *ngIf="isLoggedIn"
+    [matMenuTriggerFor]="profileMenu"
+    aria-label="Profil"
+  >
+    <mat-icon>account_circle</mat-icon>
   </button>
 
-  <button mat-stroked-button color="accent" [routerLink]="['/auth/login']">
+  <mat-menu #profileMenu="matMenu" class="profile-menu" xPosition="before">
+    <div class="profile-container" *ngIf="currentUser">
+      <div class="profile-header">
+        <mat-icon class="avatar">account_circle</mat-icon>
+        <div class="info">
+          <h4>{{ currentUser.firstName }} {{ currentUser.lastName }}</h4>
+          <small>{{ currentUser.email }}</small>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>manage_accounts</mat-icon> Modifier mon profil
+        </button>
+        <button mat-menu-item routerLink="/profile/orders">
+          <mat-icon>list_alt</mat-icon> Mes commandes
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon> Déconnexion
+        </button>
+      </div>
+    </div>
+  </mat-menu>
+
+  <button
+    mat-stroked-button
+    color="accent"
+    *ngIf="!isLoggedIn"
+    [routerLink]="['/auth/login']"
+  >
     Connexion
   </button>
 </mat-toolbar>

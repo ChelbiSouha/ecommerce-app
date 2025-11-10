@@ -4,6 +4,7 @@ import { CartService } from '../../../core/cart';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { ProductCard } from '../../../shared/product-card/product-card';
@@ -16,7 +17,8 @@ import { ActivatedRoute } from '@angular/router';
     MatFormFieldModule,   
     MatSelectModule,     
     MatOptionModule,      
-    MatPaginatorModule],
+    MatPaginatorModule,
+  MatIconModule],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })

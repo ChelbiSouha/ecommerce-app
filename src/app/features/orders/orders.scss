@@ -1,0 +1,122 @@
+.orders-wrapper {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.orders-container {
+  position: relative;
+  max-width: 900px;
+  width: 100%;
+  padding: 2rem;
+  background: linear-gradient(135deg, #a1c4fd, #fbc2eb, #ff9a9e, #ffe0e0);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.8s ease;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    animation: textPop 0.8s ease;
+  }
+
+  .chart-img {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    opacity: 0.8;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .order-card {
+    background: #fff;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+    border-left: 6px solid #1976d2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+
+      .status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: #fff;
+
+        &.delivered { background-color: #4caf50; }
+        &.in\ progress { background-color: #ff9800; }
+        &.cancelled { background-color: #f44336; }
+      }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.4rem 0;
+      li {
+        margin: 0.4rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+
+        .item-icon {
+          color: #1976d2;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .order-total {
+      text-align: right;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #1a365d;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .empty {
+    text-align: center;
+    color: #fff;
+    font-style: italic;
+    font-weight: 600;
+    margin-top: 2rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes textPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

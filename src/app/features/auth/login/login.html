@@ -1,24 +1,38 @@
 <div class="auth-wrapper">
-  <mat-card class="auth-card">
-    <h2>Connexion</h2>
+  <div class="auth-container">
+    <!-- Left decorative image -->
+    <img src="assets/images/left-decor.png" alt="Decoration Left" class="popout-image left" />
 
-    <form (ngSubmit)="login()" class="form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput [(ngModel)]="email" name="email" type="email" required />
-      </mat-form-field>
+    <!-- Right decorative image -->
+    <img src="assets/images/right-decor.png" alt="Decoration Right" class="popout-image right" />
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Mot de passe</mat-label>
-        <input matInput [(ngModel)]="password" name="password" type="password" required />
-      </mat-form-field>
+    <!-- Login card -->
+    <mat-card class="auth-card">
+      <h2>
+        <mat-icon class="title-icon">lock</mat-icon>
+        Connexion
+      </h2>
 
-      <button mat-raised-button color="primary" class="full-width" type="submit">
-        Se connecter
-      </button>
-    </form>
+      <form (ngSubmit)="login()" class="form">
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">email</mat-icon>
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" type="email" required />
+        </mat-form-field>
 
-    <p class="message" *ngIf="message">{{ message }}</p>
-    <p class="switch">Pas encore de compte ? <a routerLink="/signup">Inscrivez-vous</a></p>
-  </mat-card>
+        <mat-form-field appearance="fill" class="full-width rounded-field">
+          <mat-icon matPrefix class="icon-orange">lock</mat-icon>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [(ngModel)]="password" name="password" type="password" required />
+        </mat-form-field>
+
+        <button mat-raised-button class="submit-btn full-width" type="submit">
+          <mat-icon>login</mat-icon> Se connecter
+        </button>
+      </form>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+      <p class="switch">Pas encore de compte ? <a routerLink="/auth/signup">Inscrivez-vous</a></p>
+    </mat-card>
+  </div>
 </div>

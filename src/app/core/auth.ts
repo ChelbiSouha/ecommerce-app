@@ -7,7 +7,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  password: string; 
+  password: string;
   address?: string;
 }
 
@@ -34,10 +34,13 @@ export class AuthService {
 
   login(email: string, password: string): Observable<User | null> {
     const users = this.getRegisteredUsers();
-    const found = users.find(u => u.email === email && u.password === password) || null;
+    const found = users.find(
+      (u) => u.email === email && u.password === password
+    ) || null;
+
     return of(found).pipe(
       delay(500),
-      tap(user => {
+      tap((user) => {
         if (user) {
           localStorage.setItem(this.storageKey, JSON.stringify(user));
           this.currentUserSubject.next(user);
@@ -52,10 +55,27 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+    const storedUser = localStorage.getItem(this.storageKey);
+    return storedUser ? JSON.parse(storedUser) : null;
+  }
+
+  updateUser(updatedUser: User) {
+    localStorage.setItem(this.storageKey, JSON.stringify(updatedUser));
+    this.currentUserSubject.next(updatedUser);
+
+    const users = this.getRegisteredUsers();
+    const index = users.findIndex((u) => u.id === updatedUser.id);
+    if (index !== -1) {
+      users[index] = updatedUser;
+      localStorage.setItem(this.usersKey, JSON.stringify(users));
+    }
   }
 
   private getRegisteredUsers(): User[] {
     return JSON.parse(localStorage.getItem(this.usersKey) || '[]');
   }
+  get isLoggedIn(): boolean {
+  return !!this.getCurrentUser();
+}
+
 }

@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
