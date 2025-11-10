@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Rating } from '../rating/rating';
 import { Router } from '@angular/router';
+import { WishlistService } from '../../core/wishlist';
+
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule, 
@@ -21,7 +23,7 @@ import { Router } from '@angular/router';
 export class ProductCard {
    @Input() product!: Product;
 
-  constructor(private cartService: CartService,private router: Router) {}
+  constructor(private cartService: CartService,private router: Router,public wishlist: WishlistService) {}
 
   addToCart(event: MouseEvent) {
     event.stopPropagation();
@@ -31,6 +33,14 @@ export class ProductCard {
 
   goToDetails() {
     this.router.navigate(['/products', this.product.id]);
+  }
+  toggleFavorite(event: MouseEvent) {
+    event.stopPropagation();
+    this.wishlist.toggle(this.product);
+  }
+
+  isFavorite(): boolean {
+    return this.wishlist.isFavorite(this.product.id);
   }
 
 }

@@ -16,5 +16,10 @@
       <mat-icon>add_shopping_cart</mat-icon>
       Ajouter au panier
     </button>
+    <button mat-icon-button (click)="toggleFavorite($event)">
+      <mat-icon color="warn">
+        {{ isFavorite() ? 'favorite' : 'favorite_border' }}
+      </mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
