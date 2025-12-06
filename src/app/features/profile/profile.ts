@@ -7,8 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService, User } from '../../core/auth';
+
 @Component({
   selector: 'app-profile',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -29,7 +31,21 @@ export class Profile implements OnInit {
   constructor(private auth: AuthService) {}
 
   ngOnInit() {
-    this.user = this.auth.getCurrentUser();
+  this.auth.currentUser$.subscribe(session => {
+    if (session) this.loadFullProfile();
+  });
+}
+
+
+  // 🔥 load full user from backend
+  private loadFullProfile() {
+    const token = this.auth.getToken();
+    if (!token) return;
+
+    this.auth.getFullProfile().subscribe({
+      next: (u) => (this.user = u),
+      error: () => console.error('Failed to load user profile')
+    });
   }
 
   enableEdit() {
@@ -37,11 +53,19 @@ export class Profile implements OnInit {
   }
 
   saveProfile() {
-    if (this.user) {
-      this.auth.updateUser(this.user);
-      this.editMode = false;
-      this.message = '✅ Profil mis à jour avec succès !';
-      setTimeout(() => (this.message = ''), 2000);
-    }
+    if (!this.user) return;
+
+    this.auth.updateUserProfile(this.user).subscribe({
+      next: (updatedUser) => {
+        this.user = updatedUser;
+        this.editMode = false;
+        this.message = '✅ Profil mis à jour avec succès !';
+        setTimeout(() => (this.message = ''), 2000);
+      },
+      error: () => {
+        this.message = '❌ Impossible de mettre à jour le profil.';
+        setTimeout(() => (this.message = ''), 2000);
+      },
+    });
   }
 }

@@ -1,70 +1,132 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Product } from './product';
 
 export interface CartItem {
-  product: Product;
+  productId: string;
+  productName: string;
+  price: number;
   quantity: number;
+}
+
+export interface Cart {
+  id: string;
+  userId: string;
+  items: CartItem[];
+  total: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private items: CartItem[] = [];
+  private baseUrl = 'http://localhost:8080/api/cart';
 
-  constructor() {
-    // Charger le panier depuis localStorage si existant
-    const stored = localStorage.getItem('cart');
-    if (stored) {
-      this.items = JSON.parse(stored);
+  constructor(private http: HttpClient) {}
+
+  private getAuthHeaders(token: string) {
+    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  }
+
+  // ---------- Guest Cart in localStorage ----------
+  getLocalCart(): CartItem[] {
+    const data = localStorage.getItem('guest_cart');
+    return data ? JSON.parse(data) : [];
+  }
+
+  saveLocalCart(items: CartItem[]) {
+    localStorage.setItem('guest_cart', JSON.stringify(items));
+  }
+
+  // ---------- Common methods ----------
+  getCart(userId?: string, token?: string): Observable<Cart> {
+    if (!userId || !token) {
+      // Guest cart
+      return new Observable<Cart>(observer => {
+        const items = this.getLocalCart();
+        observer.next({ id: 'guest', userId: 'guest', items, total: items.reduce((s,i)=>s+i.price*i.quantity,0) });
+        observer.complete();
+      });
     }
+    // Logged-in cart from backend
+    return this.http.get<Cart>(`${this.baseUrl}/${userId}`, this.getAuthHeaders(token));
   }
 
-  // Ajouter un produit au panier
-  add(product: Product, quantity: number = 1) {
-    const existing = this.items.find(i => i.product.id === product.id);
-    if (existing) {
-      existing.quantity += quantity;
-    } else {
-      this.items.push({ product, quantity });
+  addToCart(product: Product, quantity: number, userId?: string, token?: string): Observable<Cart> {
+    if (!userId || !token) {
+      const items = this.getLocalCart();
+      const existing = items.find(i => i.productId === product.id);
+      if (existing) existing.quantity += quantity;
+      else items.push({ productId: product.id, productName: product.name, price: product.price, quantity });
+      this.saveLocalCart(items);
+
+      return new Observable<Cart>(observer => {
+        observer.next({ id: 'guest', userId: 'guest', items, total: items.reduce((s,i)=>s+i.price*i.quantity,0) });
+        observer.complete();
+      });
     }
-    this.save();
+
+    return this.http.post<Cart>(
+      `${this.baseUrl}/${userId}/add`,
+      { productId: product.id, productName: product.name, price: product.price, quantity },
+      this.getAuthHeaders(token)
+    );
   }
 
-  // Supprimer un produit du panier
-  remove(productId: number) {
-    this.items = this.items.filter(i => i.product.id !== productId);
-    this.save();
-  }
+  updateItem(productId: string, quantity: number, userId?: string, token?: string): Observable<Cart> {
+    if (!userId || !token) {
+      const items = this.getLocalCart();
+      const item = items.find(i => i.productId === productId);
+      if (item) item.quantity = quantity;
+      this.saveLocalCart(items);
 
-  // Modifier la quantité d'un produit
-  updateQuantity(productId: number, quantity: number) {
-    const item = this.items.find(i => i.product.id === productId);
-    if (item) {
-      item.quantity = quantity;
-      if (item.quantity <= 0) this.remove(productId);
-      this.save();
+      return new Observable<Cart>(observer => {
+        observer.next({ id: 'guest', userId: 'guest', items, total: items.reduce((s,i)=>s+i.price*i.quantity,0) });
+        observer.complete();
+      });
     }
+
+    return this.http.put<Cart>(
+      `${this.baseUrl}/${userId}/update/${productId}`,
+      { quantity },
+      this.getAuthHeaders(token)
+    );
   }
 
-  // Obtenir tous les articles du panier
-  getItems(): CartItem[] {
-    return this.items;
+  removeItem(productId: string, userId?: string, token?: string): Observable<Cart> {
+    if (!userId || !token) {
+      let items = this.getLocalCart();
+      items = items.filter(i => i.productId !== productId);
+      this.saveLocalCart(items);
+
+      return new Observable<Cart>(observer => {
+        observer.next({ id: 'guest', userId: 'guest', items, total: items.reduce((s,i)=>s+i.price*i.quantity,0) });
+        observer.complete();
+      });
+    }
+
+    return this.http.delete<Cart>(
+      `${this.baseUrl}/${userId}/remove/${productId}`,
+      this.getAuthHeaders(token)
+    );
+  }
+  clearCart(userId?: string, token?: string): Observable<Cart> {
+  if (!userId || !token) {
+    // Guest cart
+    localStorage.removeItem('guest_cart');
+    return new Observable<Cart>(observer => {
+      observer.next({ id: 'guest', userId: 'guest', items: [], total: 0 });
+      observer.complete();
+    });
   }
 
-  // Obtenir le sous-total
-  getSubtotal(): number {
-    return this.items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
-  }
-
-  // Vider le panier
-  clear() {
-    this.items = [];
-    this.save();
-  }
-
-  // Sauvegarder dans localStorage
-  private save() {
-    localStorage.setItem('cart', JSON.stringify(this.items));
-  }
+  // Logged-in cart (backend)
+  return this.http.delete<Cart>(
+    `${this.baseUrl}/${userId}/clear`,
+    this.getAuthHeaders(token)
+  );
 }
+
+}
+

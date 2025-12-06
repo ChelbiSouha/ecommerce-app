@@ -1,42 +1,62 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Product } from './product'; 
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from './auth';
+import { Product } from './product';
+import { tap } from 'rxjs/operators';
+import { ProductService } from './product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistService {
-  private wishlistKey = 'wishlist';
-
-  private _wishlist = new BehaviorSubject<Product[]>(this.loadWishlist());
+  private baseUrl = 'http://localhost:8080/api/wishlist';
+  private _wishlist = new BehaviorSubject<Product[]>([]);
   public wishlist$ = this._wishlist.asObservable();
 
-  constructor() {}
+  constructor(private http: HttpClient, private auth: AuthService,private productService: ProductService) {}
 
-  private loadWishlist(): Product[] {
-    const stored = localStorage.getItem(this.wishlistKey);
-    return stored ? JSON.parse(stored) : [];
+  private getHeaders(): HttpHeaders {
+    const token = this.auth.getToken(); // implement getToken in AuthService
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
-  private saveWishlist(items: Product[]) {
-    localStorage.setItem(this.wishlistKey, JSON.stringify(items));
-    this._wishlist.next(items);
+  loadWishlist(): void {
+  const user = this.auth.getCurrentUser();
+  if (!user) return;
+
+  this.http
+    .get<{ productIds: string[] }>(`${this.baseUrl}/${user.id}`, { headers: this.getHeaders() })
+    .subscribe(wishlist => {
+      const productIds = wishlist.productIds || [];
+      this._wishlist.next([]);
+      productIds.forEach(id => {
+        this.productService.getProductById(id).subscribe(p => {
+          this._wishlist.next([...this._wishlist.value, p]);
+        });
+      });
+    });
+}
+
+
+
+  add(product: Product): void {
+    const user = this.auth.getCurrentUser();
+    if (!user) return;
+
+    this.http.post<string[]>(`${this.baseUrl}/${user.id}/${product.id}`, {}, { headers: this.getHeaders() })
+      .subscribe(() => this.loadWishlist());
   }
 
-  add(product: Product) {
-    const current = this._wishlist.value;
-    if (!current.find(p => p.id === product.id)) {
-      this.saveWishlist([...current, product]);
-    }
+  remove(productId: string): void {
+    const user = this.auth.getCurrentUser();
+    if (!user) return;
+
+    this.http.delete<string[]>(`${this.baseUrl}/${user.id}/${productId}`, { headers: this.getHeaders() })
+      .subscribe(() => this.loadWishlist());
   }
 
-  remove(productId: number) {
-    const filtered = this._wishlist.value.filter(p => p.id !== productId);
-    this.saveWishlist(filtered);
-  }
-
-  toggle(product: Product) {
+  toggle(product: Product): void {
     const current = this._wishlist.value;
     if (current.find(p => p.id === product.id)) {
       this.remove(product.id);
@@ -45,7 +65,15 @@ export class WishlistService {
     }
   }
 
-  isFavorite(productId: number): boolean {
+  isFavorite(productId: string): boolean {
     return !!this._wishlist.value.find(p => p.id === productId);
+  }
+
+  clear(): void {
+    const user = this.auth.getCurrentUser();
+    if (!user) return;
+
+    this.http.delete(`${this.baseUrl}/clear/${user.id}`, { headers: this.getHeaders() })
+      .subscribe(() => this._wishlist.next([]));
   }
 }

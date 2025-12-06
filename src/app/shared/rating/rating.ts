@@ -8,9 +8,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './rating.scss',
 })
 export class Rating {
-  @Input() value = 0;       // current rating
-  @Input() max = 5;         // maximum stars
-  @Input() readonly = true; // default readonly
+  @Input() value = 0;     
+  @Input() max = 5;         
+  @Input() readonly = true; 
   @Output() valueChange = new EventEmitter<number>();
 
   stars: number[] = [];

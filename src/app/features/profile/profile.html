@@ -32,7 +32,7 @@
           <input matInput [(ngModel)]="user.address" name="address" />
         </mat-form-field>
 
-        <button mat-raised-button type="submit" class="btn-save">
+        <button mat-raised-button color="primary" type="submit" class="btn-save">
           <mat-icon>save</mat-icon> Enregistrer
         </button>
       </form>
@@ -40,7 +40,7 @@
       <ng-template #viewMode>
         <div class="profile-info">
           <p><strong>Adresse:</strong> {{ user.address || 'Non renseignée' }}</p>
-          <button mat-raised-button class="btn-edit" (click)="enableEdit()">
+          <button mat-raised-button color="accent" class="btn-edit" (click)="enableEdit()">
             <mat-icon>edit</mat-icon> Modifier
           </button>
         </div>

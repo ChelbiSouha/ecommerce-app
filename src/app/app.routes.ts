@@ -13,8 +13,9 @@ export const routes: Routes = [
   { path: 'auth/login', loadComponent: () => import('./features/auth/login/login').then(m => m.Login) },
   { path: 'auth/signup', loadComponent: () => import('./features/auth/signup/signup').then(m => m.Signup) },
   { path: 'profile', loadComponent: () => import('./features/profile/profile').then(m => m.Profile) },
-  { path: 'profile/orders', loadComponent: () => import('./features/orders/orders').then(m => m.Orders)  },
-  { path: 'wishlist', loadComponent: () => import('./features/wishlist/wishlist').then(m => m.WishlistComponent)  },
+  { path: 'profile/orders', loadComponent: () => import('./features/orders/orders').then(m => m.OrdersComponent) },
+  { path: 'wishlist', loadComponent: () => import('./features/wishlist/wishlist').then(m => m.Wishlist) },
+  { path: 'payment', loadComponent:() => import('./features/payment/payment').then(m => m.Payment) },
 
   { path: '**', redirectTo: 'home' }
 ];

@@ -1,9 +1,9 @@
 <mat-toolbar color="primary" class="toolbar">
   <span class="logo" routerLink="/">🛍️ MyShop</span>
 
-
   <span class="spacer"></span>
 
+  <!-- SEARCH BAR -->
   <div class="search-box">
     <mat-icon>search</mat-icon>
     <input
@@ -11,15 +11,16 @@
       type="text"
       placeholder="Rechercher un produit..."
       [(ngModel)]="searchTerm"
-      (input)="onInputChange(searchTerm)"
+      (ngModelChange)="onInputChange($event)"
     />
   </div>
 
+  <!-- CART BUTTON -->
   <button mat-icon-button [routerLink]="['/cart']" aria-label="Panier">
-  <mat-icon id="cart-icon">shopping_cart</mat-icon>
-</button>
+    <mat-icon id="cart-icon">shopping_cart</mat-icon>
+  </button>
 
-
+  <!-- PROFILE ICON (visible only if logged in) -->
   <button
     mat-icon-button
     *ngIf="isLoggedIn"
@@ -29,38 +30,46 @@
     <mat-icon>account_circle</mat-icon>
   </button>
 
+  <!-- PROFILE MENU -->
   <mat-menu #profileMenu="matMenu" class="profile-menu" xPosition="before">
     <div class="profile-container" *ngIf="currentUser">
       <div class="profile-header">
         <mat-icon class="avatar">account_circle</mat-icon>
         <div class="info">
-          <h4>{{ currentUser.firstName }} {{ currentUser.lastName }}</h4>
-          <small>{{ currentUser.email }}</small>
+          <h4>{{ currentUser.email }}</h4>
         </div>
       </div>
 
       <div class="profile-actions">
         <button mat-menu-item routerLink="/profile">
-          <mat-icon>manage_accounts</mat-icon> Modifier mon profil
+          <mat-icon>manage_accounts</mat-icon>
+          Modifier mon profil
         </button>
+
         <button mat-menu-item routerLink="/profile/orders">
-          <mat-icon>list_alt</mat-icon> Mes commandes
+          <mat-icon>list_alt</mat-icon>
+          Mes commandes
         </button>
+
         <button mat-menu-item routerLink="/wishlist">
-          <mat-icon color="warn">favorite</mat-icon> Ma liste de souhaits
+          <mat-icon color="warn">favorite</mat-icon>
+          Ma liste de souhaits
         </button>
+
         <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon> Déconnexion
+          <mat-icon>logout</mat-icon>
+          Déconnexion
         </button>
       </div>
     </div>
   </mat-menu>
 
+  <!-- LOGIN BUTTON (only if not logged in) -->
   <button
     mat-stroked-button
     color="accent"
     *ngIf="!isLoggedIn"
-    [routerLink]="['/auth/login']"
+    routerLink="/auth/login"
   >
     Connexion
   </button>

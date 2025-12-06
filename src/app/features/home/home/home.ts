@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../../core/product';
 import { ProductCard } from '../../../shared/product-card/product-card';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [CommonModule, RouterModule, ProductCard],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -14,6 +14,8 @@ import { ProductCard } from '../../../shared/product-card/product-card';
 export class Home implements OnInit {
   products: Product[] = [];
   currentSlide = 0;
+  loading = false;
+  error = '';
 
   banners = [
     { image: 'assets/images/banner1.jpg', title: 'Découvrez nos nouveaux smartphones 📱' },
@@ -32,12 +34,30 @@ export class Home implements OnInit {
   constructor(private ps: ProductService) {}
 
   ngOnInit() {
-    // Load featured products
-    this.ps.getProducts().subscribe(res => (this.products = res.slice(0, 8)));
+    this.loadFeaturedProducts();
 
     // Auto slide carousel
     setInterval(() => {
       this.currentSlide = (this.currentSlide + 1) % this.banners.length;
     }, 4000);
   }
+
+  loadFeaturedProducts() {
+  this.loading = true;
+  this.error = '';
+
+  this.ps.getFeatured(0, 8)
+    .pipe(
+      catchError(err => {
+        this.error = 'Impossible de charger les produits. Veuillez réessayer plus tard.';
+        this.loading = false;
+        return of({ content: [] } as any); // default Page<Product>
+      })
+    )
+    .subscribe(res => {
+      this.products = res.content; // ⚡ Use .content because backend returns Page<Product>
+      this.loading = false;
+    });
+}
+
 }

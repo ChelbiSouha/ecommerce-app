@@ -1,0 +1,54 @@
+<div class="payment-wrapper" *ngIf="currentUser; else notLogged">
+  <h2>💳 Paiement</h2>
+
+  <div class="cart-summary" *ngIf="cartItems.length; else emptyCart">
+    <h3>Résumé du panier</h3>
+    <ul>
+      <li *ngFor="let item of cartItems">
+        {{ item.productName }} × {{ item.quantity }} —
+        {{ item.price | currency:'TND':'symbol':'1.2-2' }}
+      </li>
+    </ul>
+    <p>Sous-total: {{ subtotal | currency:'TND':'symbol':'1.2-2' }}</p>
+    <p>Frais de livraison: {{ shippingFee | currency:'TND':'symbol':'1.2-2' }}</p>
+    <h3>Total à payer: {{ total | currency:'TND':'symbol':'1.2-2' }}</h3>
+  </div>
+
+  <mat-card class="payment-card">
+    <h3>Informations de paiement (factice)</h3>
+    <form>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom sur la carte</mat-label>
+        <input matInput [(ngModel)]="cardName" name="cardName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Numéro de carte</mat-label>
+        <input matInput [(ngModel)]="cardNumber" name="cardNumber">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Date d'expiration (MM/AA)</mat-label>
+        <input matInput [(ngModel)]="expiryDate" name="expiryDate">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>CVV</mat-label>
+        <input matInput [(ngModel)]="cvv" name="cvv" type="password">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="confirmPayment()" [disabled]="loading">
+        <mat-icon>payment</mat-icon>
+        Confirmer le paiement
+      </button>
+    </form>
+  </mat-card>
+</div>
+
+<ng-template #emptyCart>
+  <p>Votre panier est vide 🛒</p>
+</ng-template>
+
+<ng-template #notLogged>
+  <p>Veuillez vous connecter pour accéder au paiement 🔒</p>
+</ng-template>

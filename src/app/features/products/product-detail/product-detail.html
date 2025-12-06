@@ -2,13 +2,12 @@
   <!-- 🖼️ Galerie -->
   <div class="gallery">
     <img
-  #mainImage
-  class="main-image"
-  [src]="selectedImage"
-  [alt]="product.name"
-  loading="lazy"
-/>
-
+      #mainImage
+      class="main-image"
+      [src]="selectedImage"
+      [alt]="product.name"
+      loading="lazy"
+    />
 
     <div class="thumbnails">
       <img
@@ -25,13 +24,9 @@
   <div class="info">
     <h2>{{ product.name }}</h2>
 
-    <p class="description">
-      {{ product.description }}
-    </p>
+    <p class="description">{{ product.description }}</p>
 
-    <p class="price">
-      {{ product.price | number:'1.2-2' }} DT
-    </p>
+    <p class="price">{{ product.price | number:'1.2-2' }} DT</p>
 
     <p>
       <mat-icon color="accent">inventory_2</mat-icon>
@@ -44,13 +39,14 @@
     <p>
       <mat-icon color="warn">star_rate</mat-icon>
       <strong>Note :</strong>
-      <span *ngFor="let star of [1, 2, 3, 4, 5]">
+      <ng-container *ngFor="let star of [1,2,3,4,5]">
         <mat-icon color="warn">
           {{ star <= product.rating ? 'star' : 'star_border' }}
         </mat-icon>
-      </span>
+      </ng-container>
     </p>
 
+    <!-- Quantité -->
     <div class="quantity">
       <mat-form-field appearance="outline">
         <mat-label>Quantité</mat-label>
@@ -64,13 +60,81 @@
       </mat-form-field>
     </div>
 
+    <!-- ⭐ REVIEWS SECTION -->
+    <div class="reviews-container">
+
+      <h3><mat-icon>rate_review</mat-icon> Avis des utilisateurs</h3>
+
+      <!-- WRITE REVIEW -->
+      <!-- REVIEW FORM -->
+<div class="review-form" *ngIf="currentUser; else loginMsg">
+  <h4>{{ editingReviewId ? 'Modifier votre avis' : 'Laisser un avis' }}</h4>
+
+  <app-rating [(value)]="newReview.rating" [readonly]="false"></app-rating>
+
+  <mat-form-field appearance="outline" class="comment-field">
+    <mat-label>Votre commentaire</mat-label>
+    <textarea
+      matInput
+      [(ngModel)]="newReview.comment"
+      placeholder="Votre commentaire..."
+      rows="4">
+    </textarea>
+  </mat-form-field>
+
+  <div class="review-buttons">
+    <button mat-raised-button color="primary"
+            *ngIf="!editingReviewId"
+            (click)="submitReview()">
+      Publier
+    </button>
+
+    <button mat-raised-button color="accent"
+            *ngIf="editingReviewId"
+            (click)="saveEdit(editingReviewId)">
+      Enregistrer
+    </button>
+
+    <button mat-button color="warn"
+            *ngIf="editingReviewId"
+            (click)="cancelEdit()">
+      Annuler
+    </button>
+  </div>
+</div>
+
+
+      <ng-template #loginMsg>
+        <p class="login-to-review">Veuillez vous connecter pour laisser un avis.</p>
+      </ng-template>
+
+      <!-- DISPLAY REVIEWS -->
+      <div class="reviews-list">
+        <div class="review" *ngFor="let r of reviews">
+          <div class="header">
+            <strong>{{ r.userName }}</strong>
+            <span>{{ r.createdAt | date:'short' }}</span>
+          </div>
+
+          <app-rating [value]="r.rating"></app-rating>
+
+          <p class="comment">{{ r.comment }}</p>
+
+          <div class="actions" *ngIf="currentUser?.id === r.userId">
+            <button mat-button (click)="startEdit(r)">Modifier</button>
+            <button mat-button color="warn" (click)="deleteReview(r.id!)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD TO CART BUTTON -->
     <button
       mat-raised-button
       color="primary"
       class="add-btn"
       (click)="addToCart()"
-      [disabled]="product.stock === 0"
-    >
+      [disabled]="product.stock === 0">
       <mat-icon>add_shopping_cart</mat-icon>
       Ajouter au panier
     </button>
@@ -87,7 +151,7 @@
     <app-product-card
       *ngFor="let p of similarProducts"
       [product]="p"
-      class="fade-in"
-    ></app-product-card>
+      class="fade-in">
+    </app-product-card>
   </div>
 </div>

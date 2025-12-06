@@ -169,16 +169,25 @@
 
     .logo {
       margin-bottom: 0.5rem;
+      font-size: 1.2rem;
     }
 
     .search-box {
       width: 100%;
       margin: 0.5rem 0;
+      input {
+        width: 100%;
+      }
     }
 
     button[mat-stroked-button] {
-      font-size: 0.9rem;
-      padding: 0 0.8rem;
+      font-size: 0.85rem;
+      padding: 0 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    button[mat-icon-button] {
+      margin-right: 0.3rem;
     }
   }
 
@@ -191,6 +200,35 @@
 
     .profile-actions button {
       font-size: 0.85rem;
+    }
+  }
+}
+
+/* Extra small screens (phones) */
+@media (max-width: 480px) {
+  .toolbar {
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+
+    .logo {
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-box {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+
+    .spacer {
+      display: none;
+    }
+
+    button[mat-icon-button],
+    button[mat-stroked-button] {
+      width: 100%;
+      margin: 0.25rem 0;
     }
   }
 }

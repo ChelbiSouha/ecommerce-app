@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/auth';
+import { AuthService, LoggedUser, AuthRequest } from '../../../core/auth';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,12 +35,16 @@ export class Login {
 
   login() {
     this.message = '';
-    this.auth.login(this.email, this.password).subscribe(user => {
-      if (user) {
+    const body: AuthRequest = { email: this.email, password: this.password };
+
+    this.auth.login(body).subscribe({
+      next: (user: LoggedUser) => {
         this.message = 'Connexion réussie ✅';
         setTimeout(() => this.router.navigate(['/']), 1000);
-      } else {
+      },
+      error: (err) => {
         this.message = 'Email ou mot de passe invalide ❌';
+        console.error(err);
       }
     });
   }

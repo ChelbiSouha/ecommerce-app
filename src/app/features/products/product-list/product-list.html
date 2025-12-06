@@ -4,27 +4,37 @@
     Catalogue de Produits
   </h2>
 
-  <!-- Filtres et tri -->
+  <!-- Filters and Sorting -->
   <div class="filters">
-    <mat-form-field appearance="outline">
-      <mat-label>Catégorie</mat-label>
-      <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
-        <mat-option value="">Toutes</mat-option>
-        <mat-option *ngFor="let c of categories" [value]="c">{{ c }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!-- Category Filter -->
+   <mat-form-field appearance="outline">
+  <mat-label>Catégorie</mat-label>
+  <mat-select [(value)]="selectedCategory" (selectionChange)="applyFilters()">
+    <mat-option value="">Toutes</mat-option>
+    <mat-option *ngFor="let c of categories" [value]="c.id">
+      {{ c.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
+
+
+
+    <!-- Rating Filter -->
     <mat-form-field appearance="outline">
       <mat-label>Note minimum</mat-label>
-      <mat-select [(value)]="ratingFilter" (selectionChange)="applyFilters()">
+      <mat-select [(value)]="ratingFilter" (selectionChange)="applyFilters()" aria-label="Filtrer par note">
         <mat-option value="0">Toutes</mat-option>
-        <mat-option *ngFor="let r of [1,2,3,4,5]" [value]="r">{{r}} étoile{{r>1?'s':''}}</mat-option>
+        <mat-option *ngFor="let r of [1,2,3,4,5]" [value]="r">
+          {{ r }} étoile{{ r > 1 ? 's' : '' }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
+    <!-- Sorting -->
     <mat-form-field appearance="outline">
       <mat-label>Trier par</mat-label>
-      <mat-select [(value)]="sortOption" (selectionChange)="applySort()">
+      <mat-select [(value)]="sortOption" (selectionChange)="applySort()" aria-label="Trier les produits">
         <mat-option value="">Par défaut</mat-option>
         <mat-option value="priceAsc">Prix croissant</mat-option>
         <mat-option value="priceDesc">Prix décroissant</mat-option>
@@ -34,8 +44,8 @@
     </mat-form-field>
   </div>
 
-  <!-- Grille de produits -->
-  <div class="grid">
+  <!-- Product Grid -->
+  <div *ngIf="paginatedProducts.length; else emptyState" class="grid">
     <app-product-card
       *ngFor="let product of paginatedProducts"
       [product]="product"
@@ -43,15 +53,23 @@
     ></app-product-card>
   </div>
 
+  <!-- Empty State -->
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <p>Aucun produit trouvé 😢</p>
+    </div>
+  </ng-template>
+
   <!-- Pagination -->
-  <div class="pagination">
-    <button mat-stroked-button color="primary" (click)="prevPage()" [disabled]="page===1">
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button mat-stroked-button color="primary" (click)="prevPage()" [disabled]="page === 1" aria-label="Page précédente">
       <mat-icon>chevron_left</mat-icon> Précédent
     </button>
 
-    <span>Page {{page}} / {{totalPages}}</span>
+    <span>Page {{ page }} / {{ totalPages }}</span>
 
-    <button mat-stroked-button color="primary" (click)="nextPage()" [disabled]="page===totalPages">
+    <button mat-stroked-button color="primary" (click)="nextPage()" [disabled]="page === totalPages" aria-label="Page suivante">
       Suivant <mat-icon>chevron_right</mat-icon>
     </button>
   </div>

@@ -1,49 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService, User } from '../../core/auth';
-
-interface Order {
-  id: number;
-  date: string;
-  total: number;
-  status: string;
-  items: { name: string; quantity: number; price: number }[];
-}
+import { OrderService, Order } from '../../core/order';
+import { AuthService, LoggedUser } from '../../core/auth';
 
 @Component({
   selector: 'app-orders',
-  imports: [CommonModule, MatIconModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    CurrencyPipe,
+    MatIconModule
+  ],
   templateUrl: './orders.html',
-  styleUrls: ['./orders.scss'],
+  styleUrls: ['./orders.scss']
 })
-export class Orders implements OnInit {
-  orders: Order[] = [];
-  currentUser: User | null = null;
+export class OrdersComponent implements OnInit {
 
-  constructor(private auth: AuthService) {}
+  currentUser: LoggedUser | null = null;
+  orders: any[] = []; // formatted for the HTML
+
+  constructor(
+    private orderService: OrderService,
+    private auth: AuthService
+  ) {}
 
   ngOnInit() {
-    this.currentUser = this.auth.getCurrentUser();
-    this.orders = [
-      {
-        id: 101,
-        date: '2025-11-02',
-        total: 1249.99,
-        status: 'Delivered',
-        items: [
-          { name: 'iPhone 15 Pro', quantity: 1, price: 1249.99 },
-        ],
+    this.auth.currentUser$.subscribe(user => {
+      this.currentUser = user;
+
+      if (user) {
+        this.loadOrders(user.id, user.token);
+      }
+    });
+  }
+
+  loadOrders(userId: string, token: string) {
+    this.orderService.getOrdersForUser(userId, token).subscribe({
+      next: (data: Order[]) => {
+        // transform orders for your HTML
+        this.orders = data.map(o => ({
+          id: o.id,
+          date: new Date(o.createdAt).toLocaleDateString(),
+          status: o.status,
+          total: o.total,
+          items: o.items.map(i => ({
+            name: i.productName,
+            quantity: i.quantity,
+            price: i.price
+          }))
+        }));
       },
-      {
-        id: 102,
-        date: '2025-10-12',
-        total: 899.49,
-        status: 'In Progress',
-        items: [
-          { name: 'Samsung Tablet', quantity: 1, price: 899.49 },
-        ],
-      },
-    ];
+      error: err => console.error('Error loading orders:', err)
+    });
   }
 }

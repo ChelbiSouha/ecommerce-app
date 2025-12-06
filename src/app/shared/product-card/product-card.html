@@ -1,22 +1,38 @@
 <mat-card class="product-card" (click)="goToDetails()">
-  <img mat-card-image [src]="product.images[0]" [alt]="product.name" class="product-image">
+  <!-- Product image with fallback -->
+  <img
+    mat-card-image
+    [src]="product.images[0] || 'assets/placeholder.png'"
+    [alt]="product.name"
+    class="product-image"
+  />
 
   <mat-card-content>
     <h3 class="product-title">{{ product.name }}</h3>
     <p class="product-price">{{ product.price | currency:'TND':'symbol':'1.2-2' }}</p>
 
-    <!-- ⭐ Use shared rating component only -->
+    <!-- Rating component -->
     <app-rating [value]="product.rating"></app-rating>
 
-    <p class="product-category">{{ product.category }}</p>
+<p class="product-category">{{ categoryName }}</p>
   </mat-card-content>
 
-  <mat-card-actions align="end">
-    <button mat-raised-button color="primary" (click)="addToCart($event)">
+  <mat-card-actions class="actions-end">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addToCart($event)"
+      aria-label="Ajouter au panier"
+    >
       <mat-icon>add_shopping_cart</mat-icon>
       Ajouter au panier
     </button>
-    <button mat-icon-button (click)="toggleFavorite($event)">
+
+    <button
+      mat-icon-button
+      (click)="toggleFavorite($event)"
+      aria-label="Ajouter aux favoris"
+    >
       <mat-icon color="warn">
         {{ isFavorite() ? 'favorite' : 'favorite_border' }}
       </mat-icon>

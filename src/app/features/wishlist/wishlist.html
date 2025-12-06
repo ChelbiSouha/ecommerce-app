@@ -3,18 +3,23 @@
 <div *ngIf="wishlist.length; else empty">
   <div class="grid">
     <mat-card *ngFor="let product of wishlist" class="product-card">
-      <img mat-card-image [src]="product.images[0]" [alt]="product.name">
+      <img mat-card-image [src]="product.images[0] || 'assets/placeholder.png'" [alt]="product.name">
 
       <mat-card-content>
         <h3>{{ product.name }}</h3>
         <p>{{ product.price | currency:'TND':'symbol':'1.2-2' }}</p>
         <app-rating [value]="product.rating"></app-rating>
-        <p>{{ product.category }}</p>
+        <p>{{ categoryName(product.categoryId) }}</p>
       </mat-card-content>
 
-      <mat-card-actions>
-        <button mat-raised-button color="warn" (click)="remove(product.id)">
+      <mat-card-actions class="actions-end">
+        <button mat-raised-button color="warn" (click)="removeFromWishlist(product.id)">
           Retirer
+        </button>
+        <button mat-icon-button (click)="toggleWishlist(product)">
+          <mat-icon color="warn">
+            {{ isFavorite(product.id) ? 'favorite' : 'favorite_border' }}
+          </mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>

@@ -99,4 +99,39 @@
       font-size: 1rem;
     }
   }
+  .actions-end {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.product-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.product-image {
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+.product-title {
+  font-weight: 600;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  color: #4caf50;
+}
+
+.product-category {
+  font-size: 0.9rem;
+  color: gray;
+}
+
 }
